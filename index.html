@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Host</title>
+</head>
+<body>
+  <h1>Host Page</h1>
+
+  <iframe
+    id="iframe"
+    src="iframe.html"
+    width="100%"
+    height="400"
+    style="border: 1px solid #ccc;"
+  ></iframe>
+
+  <script>
+    const iframe = document.getElementById("iframe");
+
+    iframe.addEventListener("load", () => {
+      const iframeWindow = iframe.contentWindow;
+      const iframeDoc = iframe.contentDocument || iframeWindow.document;
+
+      // Criar e injetar o script
+      const script = iframeDoc.createElement("script");
+      script.src = "tracker.js";
+      iframeDoc.head.appendChild(script);
+    });
+
+    window.addEventListener("message", (event) => {
+      const { type, payload } = event.data;
+      if (!type || !payload) return;
+      console.log("[HOST] Recebido:", type, payload);
+    });
+  </script>
+</body>
+</html>
